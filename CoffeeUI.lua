@@ -11,31 +11,41 @@ local LocalPlayer = Players.LocalPlayer
 local ParentGui = CoreGui
 if gethui then ParentGui = gethui() elseif set_thread_identity then set_thread_identity(8) end
 
+-- ==============================================
+--  ТЕМА ТЕПЕРЬ ВСЕГДА LIGHT (убрал выбор)
+-- ==============================================
 local Themes = {
-    Dark = {
-        Background = Color3.fromRGB(15, 15, 18), Sidebar = Color3.fromRGB(22, 22, 26), Topbar = Color3.fromRGB(22, 22, 26),
-        Stroke = Color3.fromRGB(50, 50, 55), TextPrimary = Color3.fromRGB(255, 255, 255), TextSecondary = Color3.fromRGB(150, 150, 150),
-        Accent = Color3.fromRGB(220, 220, 220), InputBg = Color3.fromRGB(25, 25, 25), ButtonBg = Color3.fromRGB(30, 30, 35),
-        ButtonHover = Color3.fromRGB(40, 40, 45), ToggleBg = Color3.fromRGB(20, 20, 22), ToggleOff = Color3.fromRGB(150, 150, 150),
-        ToggleOn = Color3.fromRGB(220, 220, 220), DropdownBg = Color3.fromRGB(30, 30, 35), DropdownList = Color3.fromRGB(25, 25, 30),
-        SliderBg = Color3.fromRGB(20, 20, 22), SliderFill = Color3.fromRGB(220, 220, 220), InputBoxBg = Color3.fromRGB(20, 20, 22),
-        LabelColor = Color3.fromRGB(180, 180, 180), Separator = Color3.fromRGB(50, 50, 55), NotificationBg = Color3.fromRGB(25, 25, 25),
-        KeySystemBg = Color3.fromRGB(15, 15, 18), KeySystemHeader = Color3.fromRGB(22, 22, 26),
-    },
     Light = {
-        Background = Color3.fromRGB(240, 240, 245), Sidebar = Color3.fromRGB(230, 230, 235), Topbar = Color3.fromRGB(230, 230, 235),
-        Stroke = Color3.fromRGB(180, 180, 185), TextPrimary = Color3.fromRGB(20, 20, 25), TextSecondary = Color3.fromRGB(80, 80, 85),
-        Accent = Color3.fromRGB(50, 50, 55), InputBg = Color3.fromRGB(220, 220, 225), ButtonBg = Color3.fromRGB(210, 210, 215),
-        ButtonHover = Color3.fromRGB(200, 200, 205), ToggleBg = Color3.fromRGB(200, 200, 205), ToggleOff = Color3.fromRGB(150, 150, 150),
-        ToggleOn = Color3.fromRGB(50, 50, 55), DropdownBg = Color3.fromRGB(210, 210, 215), DropdownList = Color3.fromRGB(220, 220, 225),
-        SliderBg = Color3.fromRGB(200, 200, 205), SliderFill = Color3.fromRGB(50, 50, 55), InputBoxBg = Color3.fromRGB(200, 200, 205),
-        LabelColor = Color3.fromRGB(80, 80, 85), Separator = Color3.fromRGB(180, 180, 185), NotificationBg = Color3.fromRGB(230, 230, 235),
-        KeySystemBg = Color3.fromRGB(240, 240, 245), KeySystemHeader = Color3.fromRGB(230, 230, 235),
+        Background = Color3.fromRGB(240, 240, 245),
+        Sidebar = Color3.fromRGB(230, 230, 235),
+        Topbar = Color3.fromRGB(230, 230, 235),
+        Stroke = Color3.fromRGB(180, 180, 185),
+        TextPrimary = Color3.fromRGB(20, 20, 25),
+        TextSecondary = Color3.fromRGB(80, 80, 85),
+        Accent = Color3.fromRGB(50, 50, 55),
+        InputBg = Color3.fromRGB(220, 220, 225),
+        ButtonBg = Color3.fromRGB(210, 210, 215),
+        ButtonHover = Color3.fromRGB(200, 200, 205),
+        ToggleBg = Color3.fromRGB(200, 200, 205),
+        ToggleOff = Color3.fromRGB(150, 150, 150),
+        ToggleOn = Color3.fromRGB(50, 50, 55),
+        DropdownBg = Color3.fromRGB(210, 210, 215),
+        DropdownList = Color3.fromRGB(220, 220, 225),
+        SliderBg = Color3.fromRGB(200, 200, 205),
+        SliderFill = Color3.fromRGB(50, 50, 55),
+        InputBoxBg = Color3.fromRGB(200, 200, 205),
+        LabelColor = Color3.fromRGB(80, 80, 85),
+        Separator = Color3.fromRGB(180, 180, 185),
+        NotificationBg = Color3.fromRGB(230, 230, 235),
+        KeySystemBg = Color3.fromRGB(240, 240, 245),
+        KeySystemHeader = Color3.fromRGB(230, 230, 235),
     }
 }
 
-local CurrentTheme = "Dark"
+local CurrentTheme = "Light"
+local Colors = Themes.Light
 
+-- Create ScreenGui
 local ScreenObject = Instance.new("ScreenGui")
 ScreenObject.Name = "CoffeeUI_Environment"
 ScreenObject.IgnoreGuiInset = true
@@ -49,6 +59,7 @@ if ParentGui:FindFirstChild("CoffeeUI_Environment") then
     end
 end
 
+-- Notification Container
 local NotifContainer = Instance.new("Frame")
 NotifContainer.Name = "NotifContainer"
 NotifContainer.Parent = ScreenObject
@@ -63,6 +74,7 @@ NotifLayout.SortOrder = Enum.SortOrder.LayoutOrder
 NotifLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 NotifLayout.Padding = UDim.new(0, 10)
 
+-- Core Functions
 local Utility = {}
 function Utility:Tween(object, info, properties)
     local t = TweenService:Create(object, TweenInfo.new(unpack(info)), properties)
@@ -93,12 +105,11 @@ function Utility:MakeDraggable(topbar, object)
     end)
 end
 
+-- Notification System
 function CoffeeUI:Notify(options)
     local title = options.Title or "Notification"
     local content = options.Content or "Notification content."
     local duration = options.Duration or 3
-    local theme = options.Theme or CurrentTheme
-    local Colors = Themes[theme]
 
     local NotifFrame = Instance.new("Frame")
     NotifFrame.Name = "Notification"; NotifFrame.Parent = NotifContainer
@@ -159,13 +170,11 @@ end
 function CoffeeUI:CreateWindow(options)
     local WindowName = options.Name or "CoffeeUI"
     local HideKey = options.HideKey or Enum.KeyCode.K
-    local Theme = options.Theme or "Dark"
-    CurrentTheme = Theme
-    local Colors = Themes[Theme]
 
     local WindowOpen = false
     local isAnimating = false
 
+    -- Loading Screen Fullscreen
     local IntroOverlay = Instance.new("Frame")
     IntroOverlay.Name = "IntroOverlay"; IntroOverlay.Parent = ScreenObject
     IntroOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0); IntroOverlay.Position = UDim2.new(0, 0, 0, 0)
@@ -177,6 +186,7 @@ function CoffeeUI:CreateWindow(options)
     IntroTitle.Font = Enum.Font.Code; IntroTitle.Text = "Developed by Coffee"
     IntroTitle.TextColor3 = Color3.fromRGB(240, 240, 240); IntroTitle.TextScaled = true; IntroTitle.TextTransparency = 1
 
+    -- Main UI Elements
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"; MainFrame.Parent = ScreenObject
     MainFrame.BackgroundColor3 = Colors.Background; MainFrame.Position = UDim2.new(0.5, -325, 0.5, -200)
@@ -184,12 +194,14 @@ function CoffeeUI:CreateWindow(options)
     Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
     local MainStroke = Instance.new("UIStroke", MainFrame); MainStroke.Color = Colors.Stroke; MainStroke.Thickness = 1
 
+    -- Drop Shadow (Fake)
     local ShadowFrame = Instance.new("Frame")
     ShadowFrame.Name = "Shadow"; ShadowFrame.Parent = MainFrame
     ShadowFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0); ShadowFrame.Size = UDim2.new(1, 10, 1, 10)
     ShadowFrame.Position = UDim2.new(0, -5, 0, -5); ShadowFrame.BackgroundTransparency = 0.8; ShadowFrame.ZIndex = -1
     Instance.new("UICorner", ShadowFrame).CornerRadius = UDim.new(0, 14)
 
+    -- Sidebar
     local Sidebar = Instance.new("Frame")
     Sidebar.Name = "Sidebar"; Sidebar.Parent = MainFrame; Sidebar.BackgroundColor3 = Colors.Sidebar
     Sidebar.Position = UDim2.new(0, 0, 0, 35); Sidebar.Size = UDim2.new(0, 180, 1, -35); Sidebar.BorderSizePixel = 0
@@ -198,6 +210,7 @@ function CoffeeUI:CreateWindow(options)
     local SidebarFixTop = Instance.new("Frame", Sidebar); SidebarFixTop.BackgroundColor3 = Colors.Sidebar; SidebarFixTop.Position = UDim2.new(0, 0, 0, 0); SidebarFixTop.Size = UDim2.new(1, 0, 0, 10)
     local SidebarDivider = Instance.new("Frame", Sidebar); SidebarDivider.BackgroundColor3 = Colors.Stroke; SidebarDivider.Position = UDim2.new(1, 0, 0, 0); SidebarDivider.Size = UDim2.new(0, 1, 1, 0)
 
+    -- Topbar
     local Topbar = Instance.new("Frame")
     Topbar.Name = "Topbar"; Topbar.Parent = MainFrame; Topbar.BackgroundColor3 = Colors.Topbar
     Topbar.Size = UDim2.new(1, 0, 0, 35); Topbar.BorderSizePixel = 0; Topbar.ZIndex = 5
@@ -229,6 +242,7 @@ function CoffeeUI:CreateWindow(options)
     local TabPadding = Instance.new("UIPadding"); TabPadding.Parent = TabContainer; TabPadding.PaddingTop = UDim.new(0, 5); TabPadding.PaddingLeft = UDim.new(0, 10); TabPadding.PaddingRight = UDim.new(0, 10)
     TabList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function() TabContainer.CanvasSize = UDim2.new(0, 0, 0, TabList.AbsoluteContentSize.Y + 15) end)
 
+    -- Player Profile
     local ProfileFrame = Instance.new("Frame")
     ProfileFrame.Name = "ProfileFrame"; ProfileFrame.Parent = Sidebar; ProfileFrame.BackgroundTransparency = 1
     ProfileFrame.Position = UDim2.new(0, 10, 1, -60); ProfileFrame.Size = UDim2.new(1, -20, 0, 50); ProfileFrame.ClipsDescendants = true
@@ -258,16 +272,12 @@ function CoffeeUI:CreateWindow(options)
         if success and info and info.Name then GameLab.Text = info.Name else GameLab.Text = "Unknown Game" end
     end)
 
+    -- Content Area
     local ContentArea = Instance.new("Frame")
     ContentArea.Name = "ContentArea"; ContentArea.Parent = MainFrame; ContentArea.BackgroundTransparency = 1
     ContentArea.Position = UDim2.new(0, 181, 0, 35); ContentArea.Size = UDim2.new(1, -181, 1, -35)
 
-    local PhoneIcon = Instance.new("ImageLabel")
-    PhoneIcon.Name = "PhoneIcon"; PhoneIcon.Parent = ScreenObject; PhoneIcon.Size = UDim2.new(0, 100, 0, 100)
-    PhoneIcon.AnchorPoint = Vector2.new(0.5, 0.5); PhoneIcon.Position = UDim2.new(1, 0, 0, 50)
-    PhoneIcon.BackgroundTransparency = 1; PhoneIcon.Image = "rbxassetid://76824473425864"; PhoneIcon.ImageTransparency = 0
-    PhoneIcon.ScaleType = Enum.ScaleType.Fit; PhoneIcon.Visible = false; PhoneIcon.ZIndex = 999
-
+    -- Loading Animation (сначала чёрный экран, потом плавное появление окна)
     task.spawn(function()
         Utility:Tween(IntroOverlay, {0.5}, {BackgroundTransparency = 0}); task.wait(0.6)
         Utility:Tween(IntroTitle, {1.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out}, {TextTransparency = 0})
@@ -275,29 +285,61 @@ function CoffeeUI:CreateWindow(options)
         task.wait(1.5)
         Utility:Tween(IntroTitle, {0.6}, {TextTransparency = 1, Size = UDim2.new(0, 600, 0, 120), Position = UDim2.new(0.5, -300, 0.5, -60)})
         task.wait(0.7)
-        MainFrame.Visible = true; MainFrame.Size = UDim2.new(0, 550, 0, 300); MainFrame.Position = UDim2.new(0.5, -275, 0.5, -150)
+        
+        MainFrame.Visible = true
+        MainFrame.Size = UDim2.new(0, 100, 0, 100)
+        MainFrame.Position = UDim2.new(0.5, -50, 0.5, -50)
+        MainFrame.BackgroundTransparency = 1
+        
         task.delay(1.5, function() if IntroOverlay and IntroOverlay.Parent then IntroOverlay:Destroy() end end)
         local fadeBg = Utility:Tween(IntroOverlay, {0.8}, {BackgroundTransparency = 1})
-        Utility:Tween(MainFrame, {0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out}, {Size = UDim2.new(0, 650, 0, 400), Position = UDim2.new(0.5, -325, 0.5, -200)})
-        fadeBg.Completed:Connect(function() if IntroOverlay and IntroOverlay.Parent then IntroOverlay:Destroy() end; WindowOpen = true; CoffeeUI:Notify({Title = "Loaded", Content = "coffee module loaded successfully.", Duration = 4, Theme = Theme}) end)
+        
+        -- Плавное вырастание при первом открытии (1 секунда)
+        Utility:Tween(MainFrame, {1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out}, {
+            Size = UDim2.new(0, 650, 0, 400),
+            Position = UDim2.new(0.5, -325, 0.5, -200),
+            BackgroundTransparency = 0
+        })
+        
+        fadeBg.Completed:Connect(function()
+            if IntroOverlay and IntroOverlay.Parent then IntroOverlay:Destroy() end
+            WindowOpen = true
+            CoffeeUI:Notify({Title = "Loaded", Content = "CoffeeUI loaded successfully.", Duration = 4})
+        end)
     end)
 
+    -- ============================================================
+    --  НОВАЯ АНИМАЦИЯ ОТКРЫТИЯ / ЗАКРЫТИЯ: 1 сек, в центре экрана
+    -- ============================================================
     local function ToggleUI(state)
         if isAnimating then return end
         isAnimating = true
         WindowOpen = state
         if WindowOpen then
-            PhoneIcon.Visible = true; PhoneIcon.Size = UDim2.new(0, 100, 0, 100); PhoneIcon.Position = UDim2.new(1, 0, 0, 50)
-            local flyIn = Utility:Tween(PhoneIcon, {0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out}, {Position = UDim2.new(0.5, 0, 0.5, 0)})
-            flyIn.Completed:Connect(function()
-                PhoneIcon.Visible = false
-                MainFrame.Visible = true; MainFrame.Size = UDim2.new(0, 100, 0, 100); MainFrame.Position = UDim2.new(0.5, -50, 0.5, -50); MainFrame.BackgroundTransparency = 0
-                Utility:Tween(MainFrame, {2.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out}, {Size = UDim2.new(0, 650, 0, 400), Position = UDim2.new(0.5, -325, 0.5, -200)}).Completed:Connect(function() isAnimating = false end)
+            MainFrame.Visible = true
+            MainFrame.Size = UDim2.new(0, 100, 0, 100)
+            MainFrame.Position = UDim2.new(0.5, -50, 0.5, -50)
+            MainFrame.BackgroundTransparency = 1
+
+            Utility:Tween(MainFrame, {1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out}, {
+                Size = UDim2.new(0, 650, 0, 400),
+                Position = UDim2.new(0.5, -325, 0.5, -200),
+                BackgroundTransparency = 0
+            }).Completed:Connect(function()
+                isAnimating = false
             end)
         else
-            Utility:Tween(MainFrame, {2.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out}, {Size = UDim2.new(0, 100, 0, 100), Position = UDim2.new(0.5, -50, -0.5, -50), BackgroundTransparency = 1}).Completed:Connect(function()
-                MainFrame.Visible = false
-                MainFrame.Size = UDim2.new(0, 650, 0, 400); MainFrame.Position = UDim2.new(0.5, -325, 0.5, -200); MainFrame.BackgroundTransparency = 0
+            Utility:Tween(MainFrame, {1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out}, {
+                Size = UDim2.new(0, 100, 0, 100),
+                Position = UDim2.new(0.5, -50, 0.5, -50),
+                BackgroundTransparency = 1
+            }).Completed:Connect(function()
+                if not WindowOpen then
+                    MainFrame.Visible = false
+                    MainFrame.Size = UDim2.new(0, 650, 0, 400)
+                    MainFrame.Position = UDim2.new(0.5, -325, 0.5, -200)
+                    MainFrame.BackgroundTransparency = 0
+                end
                 isAnimating = false
             end)
         end
@@ -519,7 +561,7 @@ function CoffeeUI:CreateWindow(options)
 end
 
 function CoffeeUI:KeySystem(config)
-    local validKey = config.Key or ""; local linkURL = config.GetKeyURL or ""; local title = config.Title or "COFFEE"; local subtitle = config.Subtitle or "Enter your key to continue"; local theme = config.Theme or CurrentTheme; local Colors = Themes[theme]
+    local validKey = config.Key or ""; local linkURL = config.GetKeyURL or ""; local title = config.Title or "COFFEE"; local subtitle = config.Subtitle or "Enter your key to continue"
     local KGui = Instance.new("ScreenGui"); KGui.Name = "CoffeeUI_KeySystem"; KGui.DisplayOrder = 9999; KGui.IgnoreGuiInset = true; KGui.ResetOnSpawn = false; KGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling; KGui.Parent = ParentGui
     local Overlay = Instance.new("Frame", KGui); Overlay.Size = UDim2.fromScale(1,1); Overlay.BackgroundColor3 = Color3.fromRGB(0,0,0); Overlay.BackgroundTransparency = 1; Overlay.ZIndex = 100
     local Card = Instance.new("Frame", KGui); Card.AnchorPoint = Vector2.new(0.5,0.5); Card.Position = UDim2.fromScale(0.5, 0.52); Card.Size = UDim2.fromOffset(360, 200); Card.BackgroundColor3 = Colors.KeySystemBg; Card.ZIndex = 101; Instance.new("UICorner",Card).CornerRadius = UDim.new(0,10)
